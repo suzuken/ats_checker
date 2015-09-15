@@ -10,7 +10,6 @@ import (
 	"crypto/tls"
 	"flag"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 )
@@ -60,10 +59,10 @@ func main() {
 	if r, err := check(resp); err != nil {
 		panic(err)
 	} else if r == false {
-		log.Printf("%s is not acceptable for ATS\n debug info: %#v\n", url, resp.TLS)
+		fmt.Printf("%s is not acceptable for ATS\n debug info: %#v\n", url, resp.TLS)
 		os.Exit(1)
 	}
 
-	log.Printf("%s is acceptable for ATS\n", url)
+	fmt.Printf("%s is acceptable for ATS\n", url)
 	os.Exit(0)
 }
