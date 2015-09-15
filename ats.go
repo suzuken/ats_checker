@@ -9,6 +9,7 @@ package main
 import (
 	"crypto/tls"
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -47,6 +48,10 @@ func check(resp *http.Response) (bool, error) {
 
 func main() {
 	flag.Parse()
+	if len(flag.Args()) != 1 {
+		fmt.Println("Usage: ats_checker https://path/to/url")
+		os.Exit(0)
+	}
 	url := flag.Arg(0)
 	resp, err := http.Get(url)
 	if err != nil {
