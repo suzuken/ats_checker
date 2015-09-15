@@ -1,7 +1,9 @@
-// ATS checker verify if the given path is acceptable cipher for ATS.
+// ATS checker verify if the given path provides acceptable cipher for ATS.
 //
 // App Transport Security Technote: App Transport Security Technote
 // https://developer.apple.com/library/prerelease/ios/technotes/App-Transport-Security-Technote/
+//
+// Usage: ats_checker https://path/to/url
 package main
 
 import (
