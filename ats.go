@@ -58,7 +58,6 @@ func check(resp *http.Response) (bool, error) {
 	}
 
 	for _, c := range acceptableCipher {
-		fmt.Println(c)
 		if resp.TLS.CipherSuite == c {
 			ciperCheck = true
 			break
