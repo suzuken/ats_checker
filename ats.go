@@ -8,6 +8,7 @@ package main
 
 import (
 	"crypto/tls"
+	"crypto/x509"
 	"flag"
 	"fmt"
 	"net/http"
@@ -29,20 +30,49 @@ var acceptableCipher = []uint16{
 	tls.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
 }
 
+var acceptableSignatureAlgorithm = []x509.SignatureAlgorithm{
+	// x509.MD2WithRSA,
+	// x509.MD5WithRSA,
+	// x509.SHA1WithRSA,
+	x509.SHA256WithRSA,
+	x509.SHA384WithRSA,
+	x509.SHA512WithRSA,
+	// x509.DSAWithSHA1,
+	// x509.DSAWithSHA256,
+	// x509.ECDSAWithSHA1,
+	x509.ECDSAWithSHA256,
+	x509.ECDSAWithSHA384,
+	x509.ECDSAWithSHA512,
+}
+
 // check verify ciphers and TLS version
 func check(resp *http.Response) (bool, error) {
+	var ciperCheck = false
+	var signatureAlgorithmCheck = false
+
 	if resp.TLS == nil {
 		return false, nil
 	}
 	if resp.TLS.Version != tls.VersionTLS12 {
 		return false, nil
 	}
+
 	for _, c := range acceptableCipher {
+		fmt.Println(c)
 		if resp.TLS.CipherSuite == c {
-			return true, nil
+			ciperCheck = true
+			break
 		}
 	}
-	return false, nil
+
+	for _, s := range acceptableSignatureAlgorithm {
+		if resp.TLS.PeerCertificates[0].SignatureAlgorithm == s {
+			signatureAlgorithmCheck = true
+			break
+		}
+	}
+
+	return ciperCheck && signatureAlgorithmCheck, nil
 }
 
 func main() {
