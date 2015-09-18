@@ -47,7 +47,7 @@ var acceptableSignatureAlgorithm = []x509.SignatureAlgorithm{
 
 // check verify ciphers and TLS version
 func check(resp *http.Response) (bool, error) {
-	var ciperCheck = false
+	var cipherCheck = false
 	var signatureAlgorithmCheck = false
 
 	if resp.TLS == nil {
@@ -59,7 +59,7 @@ func check(resp *http.Response) (bool, error) {
 
 	for _, c := range acceptableCipher {
 		if resp.TLS.CipherSuite == c {
-			ciperCheck = true
+			cipherCheck = true
 			break
 		}
 	}
@@ -71,7 +71,7 @@ func check(resp *http.Response) (bool, error) {
 		}
 	}
 
-	return ciperCheck && signatureAlgorithmCheck, nil
+	return cipherCheck && signatureAlgorithmCheck, nil
 }
 
 func main() {
