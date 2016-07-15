@@ -75,12 +75,18 @@ func check(resp *http.Response) (bool, error) {
 }
 
 func main() {
+	insecure := flag.Bool("insecure", false, "allow to connect to SSL sites without certs")
 	flag.Parse()
 	if len(flag.Args()) != 1 {
 		fmt.Println("Usage: ats_checker https://path/to/url")
 		os.Exit(0)
 	}
 	url := flag.Arg(0)
+	if *insecure {
+		http.DefaultClient.Transport = &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		}
+	}
 	resp, err := http.Get(url)
 	if err != nil {
 		panic(err)
